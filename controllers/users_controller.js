@@ -1,9 +1,32 @@
 const User = require('../models/user');
 
-module.exports.profile = function(req, res){
-    res.render('user_profile',{
+module.exports.profile = async function(req, res){
+    try{
+        const user = await User.findById(req.params.id)
+        res.render('user_profile',{
         title:"UserProfile",
+        profile_user: user
     });
+    }catch(error){
+        console.error('Error in getting information:', error);
+        return res.status(500).send('Internal Server Error');
+    }
+    
+}
+
+module.exports.update = async function(req, res){
+    try{
+        if(req.user.id == req.params.id){
+            const user = await User.findByIdAndUpdate(req.params.id, req.body);
+            return res.redirect('back'); 
+        }else{
+            return res.status(481).send('Unauthorized');    
+        }
+    }catch(error){
+        console.error('Error in getting information:', error);
+        return res.status(500).send('Internal Server Error');
+    }
+    
 }
 
 module.exports.signUp = function(req, res){
