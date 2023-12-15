@@ -1,14 +1,20 @@
 const Post = require('../models/post');
 const Comment = require('../models/comment');
+const Like = require('../models/like');
 
 module.exports.create = async function (req, res) {
     try {
-        const post = await Post.create({
+        let post = await Post.create({
             content: req.body.content,
             user: req.user._id
         });
 
         if(req.xhr){
+            //just poulate name of user & not password in api
+
+            post = await Post.populate('user', 'email').exec();
+
+
             return res.status(200).json({
                 data: {
                     post: post
@@ -21,7 +27,7 @@ module.exports.create = async function (req, res) {
         return res.redirect('back');
        
     } catch (error) {
-        req.flash('error', err);
+        req.flash('error', error);
         //console.error('Error in creating the post', error);
         return res.status(500).send('Internal Server Error');
     }
@@ -37,6 +43,11 @@ module.exports.destroy = async function (req, res) {
         // }
 
         if(post.user == req.user.id){
+
+            await Like.deleteMany({likeable: post, onModel: 'Post'});
+            await Like.deleteMany({_id: {$in: post.comments}});
+            
+
             //await post.remove();
             await Post.deleteOne({ _id: req.params.id });
 

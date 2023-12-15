@@ -17,6 +17,23 @@
            <% } %>
       
     </small>
+
+    <br>
+    <small>
+       
+           <% if (locals.user) { %>
+            <a class="toggle-like-button" data-likes="<%= post.likes.length %>" href="/likes/toggle/?id=<%= post._id %>&type=Post">
+                <i class="fa-solid fa-heart" style="color: #f70202;"></i>
+                <%= post.likes.length %>
+            </a>
+               
+               
+           <% } else { %>
+                <i class="fa-light fa-heart" style="color: #f70202;"></i>
+                <%= post.likes.length %>
+           <% } %>
+      
+    </small>
     </p>
     
     <div class="post-comments">

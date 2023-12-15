@@ -37,6 +37,12 @@
             ${post.user.name}
       
     </small>
+    <br>
+    <small>
+    <a class="toggle-like-button" data-likes="0" href="/likes/toggle/?id=${post._id}&type=Post">
+               0 <i class="fa-light fa-heart" style="color: #f70202;"></i>
+            </a>
+    </small>
     </p>
     
     <div class="post-comments">
